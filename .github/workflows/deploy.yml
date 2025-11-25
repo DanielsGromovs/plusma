@@ -17,3 +17,32 @@ on:
         required: false
         type: boolean
         default: false
+
+env:
+  NODE_VERSION: '24.x'
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run lint
+      continue-on-error: true
+    - run: npm run test:backend
+      env: { NODE_ENV: test }
+    - run: npm run build
+      env: { NODE_ENV: production }
+    - uses: actions/upload-artifact@v4
+      with:
+        name: plusma-release
+        path: |
+          build/
+          backend/
+          package.json
+          package-lock.json
+        retention-days: 1
