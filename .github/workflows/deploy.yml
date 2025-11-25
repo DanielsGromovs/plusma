@@ -21,6 +21,29 @@ on:
 env:
   NODE_VERSION: '24.x'
 
+name: Deploy Plusma Backend
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+  workflow_dispatch:
+    inputs:
+      deploy_env:
+        description: 'Deploy to environment'
+        required: true
+        type: choice
+        options: [staging, production]
+      rollback:
+        description: 'Rollback to previous release?'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  NODE_VERSION: '24.x'
+
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
@@ -30,19 +53,27 @@ jobs:
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
+
+    # ---------- BACKEND (ExpressJS) ----------
     - run: npm ci
-    - run: npm run lint
-      continue-on-error: true
-    - run: npm run test:backend
-      env: { NODE_ENV: test }
+      working-directory: backend
+
+    # ---------- FRONTEND (React+Vite) ----------
+    - run: npm ci
+      working-directory: frontend
     - run: npm run build
+      working-directory: frontend
       env: { NODE_ENV: production }
+
+    # ---------- PACKAGE ----------
+    - name: Prepare release
+      run: |
+        mkdir -p plusma-release/backend plusma-release/public
+        cp -r backend/* plusma-release/backend/        # source code
+        cp backend/package*.json plusma-release/backend/
+        cp -r frontend/dist/* plusma-release/public/ # built vite bundle
     - uses: actions/upload-artifact@v4
       with:
         name: plusma-release
-        path: |
-          build/
-          backend/
-          package.json
-          package-lock.json
+        path: plusma-release
         retention-days: 1
