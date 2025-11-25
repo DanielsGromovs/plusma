@@ -17,7 +17,6 @@ on:
         required: false
         type: boolean
         default: false
-
 jobs:
   test-and-build:
     runs-on: ubuntu-latest
@@ -36,17 +35,21 @@ jobs:
       working-directory: backend
     - run: npm run lint
       working-directory: backend
-      continue-on-error: true
     - run: npm run test
       working-directory: backend
-      env: { NODE_ENV: test }
+      # TODO: Add NODE_ENV=test when ready
 
     # ---------- FRONTEND (React+Vite) ----------
     - run: npm ci
       working-directory: frontend
+    - run: npm run lint
+      working-directory: frontend
+    - run: npm run test
+      working-directory: frontend
+      # TODO: Add NODE_ENV=test when ready
     - run: npm run build
       working-directory: frontend
-      env: { NODE_ENV: production }
+      # TODO: Add NODE_ENV=production when ready
 
     # ---------- PACKAGE ----------
     - name: Prepare artifact
