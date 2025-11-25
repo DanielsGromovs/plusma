@@ -1,0 +1,19 @@
+name: Deploy plusma
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+  workflow_dispatch:
+    inputs:
+      deploy_env:
+        description: 'Deploy to environment'
+        required: true
+        type: choice
+        options: [staging, production]
+      rollback:
+        description: 'Rollback to previous release?'
+        required: false
+        type: boolean
+        default: false
