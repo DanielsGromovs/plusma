@@ -1,18 +1,12 @@
-import { useState } from 'react'
-import { useEffect } from 'react'
-import './App.css'
+import './styles/App.css'
+import Sidebar from './components/Sidebar'
+import Home from './pages/Home'
 
 function App() {
-  const [msg, setMsg] = useState("");
-  useEffect(() => {
-    fetch('http://localhost:3000/api/hello')
-      .then(response => response.json())
-      .then(data => setMsg(data.message));
-  }, []);
   return (
-    <div>
-      msg here:
-      <p>{msg}</p>
+    <div className='app-main'>
+      <Sidebar />
+      <Home />
     </div>
   )
 }

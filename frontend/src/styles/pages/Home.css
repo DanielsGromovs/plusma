@@ -1,0 +1,13 @@
+.home-page {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--bg);
+}
+.home-page h1 {
+    font-family: var(--font-sans);
+    color: var(--color-primary);
+}
+.home-page p {
+    font-family: var(--font-sans);
+    color: var(--text);
+}

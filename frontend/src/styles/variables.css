@@ -1,0 +1,7 @@
+:root{
+  --color-primary: #3675eb;
+  --color-accent: #7ca6ff;
+  --bg: #202020;
+  --text: #ffffff;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
